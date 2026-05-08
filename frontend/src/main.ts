@@ -4,12 +4,22 @@ import './style.css'
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 <section id="todo-container">
     <div>
-        TODO lets Beginn here
+        TODO lets Begin here
     </div>
     
-    <h3>Create your first todo Application</h3>
-    <input type="text" value="Test">
+    <input id="todo-input" type="text" value="Test">
+    
+    <div id="todo-container"></div>
 </section>
 `
 
-// setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const todoInput = document.querySelector<HTMLInputElement>('#todo-input')
+
+if (todoInput) {
+  todoInput.addEventListener('change', addInput)
+}
+
+function addInput(event: Event) {
+  const input = event.currentTarget as HTMLInputElement | null
+  console.log(`test ${input?.value ?? ''}`)
+}
