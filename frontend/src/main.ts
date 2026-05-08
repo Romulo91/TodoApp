@@ -1,14 +1,9 @@
 import './style.css'
 // import { setupCounter } from './counter.ts'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="todo-container">
-    <div>
-        TODO lets Begin here
-    </div>
-    
+document.querySelector<HTMLDivElement>('#input-container')!.innerHTML = `
+<section id="container">
     <input id="todo-input" type="text" value="Test">
-    
     <div id="todo-container"></div>
 </section>
 `
