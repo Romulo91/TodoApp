@@ -7,7 +7,7 @@ const currentTodo = document.getElementById('todo-input') as HTMLInputElement
 // constante
 const taskList: TodoItem[] = []
 
-// submit ToDo
+// submit new TodoItem
 form?.addEventListener('submit', (e) => {
   e.preventDefault()
 
@@ -17,9 +17,8 @@ form?.addEventListener('submit', (e) => {
   createTodoItem(currentTodo.value)
 })
 
+// function to create new TodoItem
 function createTodoItem(value: string): void {
-  console.log('createTodoItem', value)
-
   const newTask: TodoItem = {
     id: uuidv4(),
     text: value,
