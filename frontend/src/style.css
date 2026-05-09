@@ -83,12 +83,6 @@ p {
     margin: 0;
 }
 
-.todo-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 32px;
-}
 
 #app {
     width: 1126px;
@@ -100,6 +94,15 @@ p {
     flex-direction: column;
     box-sizing: border-box;
 }
+
+#todo-submit-form {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
 
 #center {
     display: flex;
@@ -115,3 +118,23 @@ p {
     }
 }
 
+#todo-input {
+    flex: 1;
+    min-width: 240px;
+    padding: 8px 10px;
+}
+
+#todo-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+#todo-container > div {
+    min-height: 300px;
+    background: #f7f8f9;
+    border: 1px solid #dfe1e6;
+    border-radius: 8px;
+    padding: 10px;
+}
