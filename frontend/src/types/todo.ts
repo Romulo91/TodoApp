@@ -7,6 +7,9 @@ export interface User {
 export interface TodoItem {
   id: string
   text: string
-  status: string
-  assignedUser: User | null
+  status: TodoStatus
+  assignedUser?: User | null
+  completed: boolean
 }
+
+export type TodoStatus = 'open' | 'in_progress' | 'blocked' | 'done'
