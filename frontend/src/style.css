@@ -128,7 +128,8 @@ p {
     display: grid;
     grid-template-columns: repeat(4, minmax(220px, 1fr));
     gap: 12px;
-    align-items: start;
+    align-items: stretch; /* Spalten gleich hoch */
+    min-height: 70vh;
 }
 
 #todo-container > div {
@@ -137,4 +138,27 @@ p {
     border: 1px solid #dfe1e6;
     border-radius: 8px;
     padding: 10px;
+}
+
+#open_container,
+#progress_container,
+#blocked_container,
+#done_container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+
+.open_todos_container,
+.progress_todos_container,
+.blocked_todos_container,
+.done_todos_container {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 8px;
+    border: 1px dashed #bbb;
+    overflow-y: auto;
 }
