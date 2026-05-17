@@ -15,8 +15,15 @@ export class TodoService {
     return [...source] // .sort((a, b) => a.order - b.order) TODO layter order the Todos
   }
 
-  moveTodo(targetBoard: string, list: HTMLElement) {
-    console.log('SERVICE MOVETOO', targetBoard, list)
-    // now change the todo obj pls
+  moveTodo(targetBoard: BoardTypes, list: HTMLElement) {
+    console.log('SERVICE MOVETODO', targetBoard, list)
+    if (list === null) return
+    const todo = this.todos.find((item) => item.id === list.dataset['id'])
+    if (!todo) return console.error(`something went wrong:  ${todo}`)
+    todo.board = targetBoard
+  }
+
+  removeTodo(list: HTMLElement): void {
+    this.todos.filter((li) => li.id !== list.dataset['id'])
   }
 }
