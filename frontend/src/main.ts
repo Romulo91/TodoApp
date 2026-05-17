@@ -5,6 +5,12 @@ import type { BoardTypes } from './types/todoTypes.ts'
 const form = document.getElementById('todo-submit-form') as HTMLFormElement
 const currentTodo = document.getElementById('todo-input') as HTMLInputElement
 const todoListElement = document.querySelector('.open_todos_container') as HTMLUListElement | null
+
+// Boards
+const openList = document.querySelector('.open_todos_container') as HTMLUListElement
+const progressLit = document.querySelector('.progress_todos_container') as HTMLUListElement
+const blockedLust = document.querySelector('.blocked_todos_container') as HTMLUListElement
+const doneList = document.querySelector('.done_todos_container') as HTMLUListElement
 const boardList = document.querySelectorAll(
   '.open_todos_container, .progress_todos_container, .blocked_todos_container, .done_todos_container',
 )
@@ -23,39 +29,64 @@ function submitTodoItem(e: Event): void {
   // return if currentValue is empty
   if (todoValue === '') return
 
-  service.addTodo(todoValue)
-  renderTodoList()
-  bindTodoItemsEvents()
+  service.addTodo(todoValue, 'open')
+
+  renderAllBoards()
+  // renderTodoList()
+  // bindTodoItemsEvents()
   currentTodo.value = ''
   currentTodo.focus()
 }
 
-// render TodoList here
-function renderTodoList(): void {
-  if (!todoListElement) return
+function renderAllBoards(): void {
+  renderBoard(openList, 'open')
+  renderBoard(progressLit, 'in_progress')
+  renderBoard(blockedLust, 'blocked')
+  renderBoard(doneList, 'done')
 
-  todoListElement.innerHTML = service
-    .getTodos()
+  bindTodoItemsEvents()
+}
+
+// render TodoList here
+function renderBoard(list: HTMLUListElement, board: BoardTypes): void {
+  if (!list) return
+
+  list.innerHTML = service
+    .getTodos(board)
     .map((todo) => renderTodoItem(todo))
     .join('')
 }
 
-boardList.forEach((list) => {
-  list.addEventListener('dragover', (e: Event): void => {
-    e.preventDefault()
-    console.log('TESTT Drag', e.currentTarget)
+// bind Events for each TodoIte
+function bindTodoItemsEvents(): void {
+  const todoItemElements = document.querySelectorAll<HTMLElement>('.todo-item')
+  let draggedElement: HTMLElement | null = null
+
+  // event Binding TodoItems
+  todoItemElements.forEach((todoItem) => {
+    todoItem.ondragstart = null
+    todoItem.addEventListener('dragstart', (e: DragEvent) => {
+      draggedElement = e.currentTarget as HTMLElement
+      console.log('ELEMENT%', draggedElement)
+    })
   })
 
-  list.addEventListener('drop', (e) => {
-    e.preventDefault()
-    const targetBoard = getBoardFromList(list as Element)
-    console.log('targetBoard', targetBoard)
+  // event Binding BoardList
+  boardList.forEach((list) => {
+    list.addEventListener('dragover', (e: Event): void => {
+      e.preventDefault()
+      console.log('TESTT Drag', e.currentTarget)
+    })
+    list.addEventListener('drop', (e) => {
+      e.preventDefault()
+      console.log('Drop Event', e.currentTarget)
+      let targetBoard = getBoardFromList(list as Element)
+      service.moveTodo(targetBoard, draggedElement)
+    })
   })
-})
 
-addEventListener('drag', (event) => {
-  console.log('Hello', event.currentTarget)
-})
+  // change TodoItem in service
+}
 
 function getBoardFromList(list: Element): BoardTypes {
   if (list.classList.contains('open_todos_container')) return 'open'
@@ -64,13 +95,4 @@ function getBoardFromList(list: Element): BoardTypes {
   return 'done'
 }
 
-// todoItemElement events
-function bindTodoItemsEvents(): void {
-  const todoItemElements = document.querySelectorAll<HTMLElement>('.todo-item')
-
-  todoItemElements.forEach((todoItem) => {
-    todoItem.addEventListener('dragstart', (e: DragEvent) => {
-      console.log('ROM TODO ITEM', e.currentTarget)
-    })
-  })
-}
+renderAllBoards()
