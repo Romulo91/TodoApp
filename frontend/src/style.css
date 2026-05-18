@@ -103,6 +103,27 @@ p {
     margin-top: 16px;
 }
 
+#submit-btn {
+    border: 1px solid var(--accent-border);
+    background: linear-gradient(135deg, var(--accent), #7e22ce);
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+#submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+#submit-btn:active {
+    transform: translateY(0);
+    opacity: 0.92;
+}
+
 
 #center {
     display: flex;
@@ -121,7 +142,17 @@ p {
 #todo-input {
     flex: 1;
     min-width: 240px;
-    padding: 8px 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    outline: none;
+    background: var(--bg);
+    color: var(--text-h);
+}
+
+#todo-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 #todo-container {
@@ -134,10 +165,11 @@ p {
 
 #todo-container > div {
     min-height: 300px;
-    background: #f7f8f9;
-    border: 1px solid #dfe1e6;
-    border-radius: 8px;
-    padding: 10px;
+    background: color-mix(in srgb, var(--bg) 85%, #eef2ff 15%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow);
 }
 
 #open_container,
@@ -158,7 +190,8 @@ p {
     flex: 1;
     min-height: 0;
     margin: 0;
-    padding: 8px;
-    border: 1px dashed #bbb;
+    padding: 0px;
+    border-radius: 10px;
     overflow-y: auto;
+    background: color-mix(in srgb, var(--bg) 94%, #e9ecff 6%);
 }

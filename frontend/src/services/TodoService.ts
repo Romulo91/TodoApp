@@ -7,6 +7,7 @@ export class TodoService {
   addTodo(text: string, board: BoardTypes): TodoItem {
     const todo = new Todo(crypto.randomUUID(), text, board)
     this.todos.push(todo)
+    console.log('TODOS', this.todos)
     return todo
   }
 

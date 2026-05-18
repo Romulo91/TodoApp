@@ -7,6 +7,9 @@ export interface User {
 export interface TodoItem {
   id: string
   text: string
+  title?: string
+  description?: string
+  tags?: string[]
   board: BoardTypes
   // assignedUser?: User | null
 }
