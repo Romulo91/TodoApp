@@ -10,9 +10,12 @@ const openList = document.querySelector('.open_todos_container') as HTMLUListEle
 const progressList = document.querySelector('.progress_todos_container') as HTMLUListElement
 const blockedList = document.querySelector('.blocked_todos_container') as HTMLUListElement
 const doneList = document.querySelector('.done_todos_container') as HTMLUListElement
+const deleteBtn = document.querySelectorAll<HTMLButtonElement>('.close-button')
+
 const boardList = document.querySelectorAll(
   '.open_todos_container, .progress_todos_container, .blocked_todos_container, .done_todos_container',
 )
+// delete Btn
 
 // import TodoService and store it
 const service = new TodoService()
@@ -31,8 +34,6 @@ function submitTodoItem(e: Event): void {
   service.addTodo(todoValue, 'open')
 
   renderAllBoards()
-  // renderTodoList()
-  // bindTodoItemsEvents()
   currentTodo.value = ''
   currentTodo.focus()
 }
@@ -75,6 +76,14 @@ function bindTodoItemsEvents(): void {
       // reset the transparency
       ;(e.target as HTMLElement).classList.remove('dragging')
       draggedElement = null
+    })
+
+    // delete action
+    todoItem.querySelector('.close-button')?.addEventListener('click', (e) => {
+      const removeTodo = (e.currentTarget as HTMLElement)?.dataset['id'] ?? ''
+      if (removeTodo === '') return
+      service.removeTodo(removeTodo)
+      renderAllBoards()
     })
   })
 

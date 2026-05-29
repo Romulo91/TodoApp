@@ -22,7 +22,7 @@ export class TodoService {
     todo.board = targetBoard
   }
 
-  removeTodo(list: HTMLElement): void {
-    this.todos = this.todos.filter((li) => li.id !== list.dataset['id'])
+  removeTodo(todoId: string): void {
+    this.todos = this.todos.filter((li) => li.id !== todoId)
   }
 }
