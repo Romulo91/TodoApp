@@ -7,7 +7,6 @@ export class TodoService {
   addTodo(text: string, board: BoardTypes): TodoItem {
     const todo = new Todo(crypto.randomUUID(), text, board)
     this.todos.push(todo)
-    console.log('TODOS', this.todos)
     return todo
   }
 
@@ -17,7 +16,6 @@ export class TodoService {
   }
 
   moveTodo(targetBoard: BoardTypes, list: HTMLElement) {
-    console.log('SERVICE MOVETODO', targetBoard, list)
     if (list === null) return
     const todo = this.todos.find((item) => item.id === list.dataset['id'])
     if (!todo) return console.error(`something went wrong:  ${todo}`)
@@ -25,6 +23,6 @@ export class TodoService {
   }
 
   removeTodo(list: HTMLElement): void {
-    this.todos.filter((li) => li.id !== list.dataset['id'])
+    this.todos = this.todos.filter((li) => li.id !== list.dataset['id'])
   }
 }
