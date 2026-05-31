@@ -9,6 +9,9 @@ export class TodoService {
     stored
       ? (this.todos = JSON.parse(stored))
       : localStorage.setItem('todos', JSON.stringify(this.todos))
+
+    // look if todoItem are older than 1day
+    console.log(this.todos)
   }
 
   addTodo(text: string, board: BoardTypes): TodoItem {
@@ -27,8 +30,13 @@ export class TodoService {
   moveTodo(targetBoard: BoardTypes, list: HTMLElement) {
     if (list === null) return
     const todo = this.todos.find((item) => item.id === list.dataset['id'])
+
     if (!todo) return console.error(`something went wrong:  ${todo}`)
     console.info(`moved todo to ${targetBoard}`)
+
+    if (targetBoard === 'done') todo.doneAt = Date.now()
+
+    // set todoItem to targetBoard
     todo.board = targetBoard
     localStorage.setItem('todos', JSON.stringify(this.todos))
   }

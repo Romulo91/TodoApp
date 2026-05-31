@@ -11,6 +11,7 @@ export interface TodoItem {
   description?: string
   tags?: string[]
   board: BoardTypes
+  doneAt?: number
   // assignedUser?: User | null
 }
 
