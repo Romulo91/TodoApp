@@ -3,11 +3,19 @@ import { Todo } from '../models/Todo.ts'
 
 export class TodoService {
   private todos: TodoItem[] = []
+  constructor() {
+    // set or get storage
+    const stored = localStorage.getItem('todos')
+    stored
+      ? (this.todos = JSON.parse(stored))
+      : localStorage.setItem('todos', JSON.stringify(this.todos))
+  }
 
   addTodo(text: string, board: BoardTypes): TodoItem {
     console.info('added an ToDo item')
     const todo = new Todo(crypto.randomUUID(), text, board)
     this.todos.push(todo)
+    localStorage.setItem('todos', JSON.stringify(this.todos))
     return todo
   }
 
@@ -22,10 +30,12 @@ export class TodoService {
     if (!todo) return console.error(`something went wrong:  ${todo}`)
     console.info(`moved todo to ${targetBoard}`)
     todo.board = targetBoard
+    localStorage.setItem('todos', JSON.stringify(this.todos))
   }
 
   removeTodo(todoId: string): void {
     console.info('remove Todo item')
     this.todos = this.todos.filter((li) => li.id !== todoId)
+    localStorage.setItem('todos', JSON.stringify(this.todos))
   }
 }
