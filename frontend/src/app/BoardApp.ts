@@ -1,6 +1,7 @@
 import { TodoService } from '../services/TodoService.ts'
 import type { BoardTypes } from '../types/todoTypes.ts'
 import { renderTodoItem } from '../component/TodoItem/todoItem.ts'
+import { getDragAfterElement } from '../ui/dragDrop.ts'
 
 export class BoardApp {
   private service = new TodoService()
@@ -14,14 +15,16 @@ export class BoardApp {
     done: document.querySelector('.done_todos_container') as HTMLUListElement,
   }
 
-  private boards = document.querySelectorAll(
+  private boards = document.querySelectorAll<HTMLUListElement>(
     '.open_todos_container, .progress_todos_container, .blocked_todos_container, .done_todos_container',
   )
 
   private draggedElement: HTMLElement | null = null
+  private boardEventsBound = false
 
   init() {
     this.form.addEventListener('submit', (e) => this.handleSubmit(e))
+    this.bindBoardEvents()
     this.renderAllBoards()
   }
 
@@ -65,15 +68,42 @@ export class BoardApp {
       })
     })
 
+  }
+
+  private bindBoardEvents() {
+    if (this.boardEventsBound) return
+
     this.boards.forEach((list) => {
-      list.addEventListener('dragover', (e) => e.preventDefault())
-      list.addEventListener('drop', (e) => {
+      list.addEventListener('dragover', (e: DragEvent) => {
         e.preventDefault()
         if (!this.draggedElement) return
-        this.service.moveTodo(this.getBoardFromList(list), this.draggedElement)
+
+        const afterElement = getDragAfterElement(list, e.clientY)
+
+        if (!afterElement) {
+          list.appendChild(this.draggedElement)
+          return
+        }
+
+        list.insertBefore(this.draggedElement, afterElement)
+      })
+      list.addEventListener('drop', (e: DragEvent) => {
+        e.preventDefault()
+        if (!this.draggedElement) return
+
+        const targetBoard = this.getBoardFromList(list)
+        this.service.moveTodo(targetBoard, this.draggedElement)
+
+        const orderedIds = [...list.querySelectorAll<HTMLElement>('.todo-item')]
+          .map((item) => item.dataset['id'])
+          .filter((id): id is string => Boolean(id))
+
+        this.service.reorderTodos(targetBoard, orderedIds)
         this.renderAllBoards()
       })
     })
+
+    this.boardEventsBound = true
   }
 
   private getBoardFromList(list: Element): BoardTypes {

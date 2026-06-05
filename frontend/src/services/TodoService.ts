@@ -41,6 +41,22 @@ export class TodoService {
     localStorage.setItem('todos', JSON.stringify(this.todos))
   }
 
+  reorderTodos(board: BoardTypes, orderedIds: string[]): void {
+    const boardTodos = this.todos.filter((todo) => todo.board === board)
+    const remainingTodos = this.todos.filter((todo) => todo.board !== board)
+    const boardTodoMap = new Map(boardTodos.map((todo) => [todo.id, todo]))
+
+    const reorderedBoardTodos = orderedIds
+      .map((id) => boardTodoMap.get(id))
+      .filter((todo): todo is TodoItem => Boolean(todo))
+
+    // Keep any board items not present in orderedIds at the end for safety.
+    const missingBoardTodos = boardTodos.filter((todo) => !orderedIds.includes(todo.id))
+
+    this.todos = [...remainingTodos, ...reorderedBoardTodos, ...missingBoardTodos]
+    localStorage.setItem('todos', JSON.stringify(this.todos))
+  }
+
   removeTodo(todoId: string): void {
     console.info('remove Todo item')
     this.todos = this.todos.filter((li) => li.id !== todoId)
